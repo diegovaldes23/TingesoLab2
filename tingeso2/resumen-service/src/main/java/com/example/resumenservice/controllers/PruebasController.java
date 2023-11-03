@@ -1,0 +1,71 @@
+package com.example.resumenservice.controllers;
+
+
+import com.example.resumenservice.entities.PruebasEntity;
+import com.example.resumenservice.services.PruebasService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/pruebas")
+public class PruebasController {
+    @Autowired
+    PruebasService pruebasService;
+
+
+    // Método para manejar solicitudes GET y devolver la lista de pruebas
+    @GetMapping("/listar-pruebas")
+    public ResponseEntity<List<PruebasEntity>> listarPruebas() {
+        List<PruebasEntity> pruebas = pruebasService.obtenerPruebas();
+        if (pruebas.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(pruebas);
+    }
+
+
+    /*
+    @PostMapping("/fileUpload")
+    public String upload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+        pruebasService.guardar(file);
+        redirectAttributes.addFlashAttribute("mensaje", "¡Archivo cargado correctamente!");
+        pruebasService.leerTxt("students_exams.csv");
+        return "redirect:/fileUpload";
+    }*/
+    @PostMapping("/fileUpload")
+    public String upload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+        if (file.isEmpty()) {
+            // Manejar el caso cuando no se selecciona ningún archivo
+            redirectAttributes.addFlashAttribute("mensaje", "Por favor seleccione un archivo");
+            return "redirect:/fileUpload";
+        }
+
+        try {
+            // Obtener el nombre del archivo
+            String fileName = file.getOriginalFilename();
+
+            // Guardar el archivo
+            pruebasService.guardar(file);
+
+            // Agregar un mensaje con el nombre del archivo cargado
+            redirectAttributes.addFlashAttribute("mensaje", "¡Archivo '" + fileName + "' cargado correctamente!");
+
+            // Realizar cualquier otra operación que necesites con el archivo, como leerlo
+            pruebasService.leerTxt(fileName);
+        } catch (Exception e) {
+            // Manejar cualquier excepción que pueda ocurrir al procesar el archivo
+            redirectAttributes.addFlashAttribute("mensaje", "Error al cargar el archivo: " + e.getMessage());
+        }
+
+        return "redirect:/fileUpload";
+    }
+
+}
