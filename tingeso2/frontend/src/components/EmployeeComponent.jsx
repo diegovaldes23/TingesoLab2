@@ -1,48 +1,50 @@
 import React, { Component } from "react";
-import NavbarComponent3 from "./NavbarComponent3";
+import NavbarComponent from "./NavbarComponent";
 import styled from "styled-components";
 
 class EmployeeComponent extends Component{
     constructor(props){
         super(props);
         this.state = {
-            employees: [],
+            estudiantes: [],
         };
     }
 
     componentDidMount(){
-        fetch("http://localhost:8080/empleado")
+        fetch("http://localhost:8080/estudiante/listar-estudiantes")
         .then((response) => response.json())
-        .then((data) => this.setState({ employees: data }));
+        .then((data) => this.setState({ estudiantes: data }));
     }
 
     render(){
         return(
             <div className="home">
-                <NavbarComponent3 />
+                <NavbarComponent />
                 <Styles>
-                <h1 className="text-center"> <b>Listado de empleados</b></h1>
+                <h1 className="text-center"> <b>Listado de Estudiantes</b></h1>
                     <div className="f">
                     <table border="1" class="content-table">
                         <thead>
                             <tr>
-                                <th>Rut</th>
-                                <th>Nombres</th>
-                                <th>Apellidos</th>
-                                <th>Fecha de Nacimiento</th>
-                                <th>Categoria</th>
-                                <th>Fecha de Ingreso</th>
+                            <th>rut</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Tipo de colegio</th>
+                            <th>Nombre del colegio</th>
+                            <th>Fecha de nacimiento</th>
+                            <th>Año de egreso</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.employees.map((employee) => (
-                                <tr key={employee.rut}>
-                                    <td>{employee.rut}</td>
-                                    <td>{employee.nombres}</td>
-                                    <td>{employee.apellidos}</td>
-                                    <td>{employee.fecha_nacimiento}</td>
-                                    <td>{employee.categoria}</td>
-                                    <td>{employee.fecha_ingreso}</td>
+                            {this.state.estudiantes.map((estudiante) => (
+                                <tr key={estudiante.rut}>
+                                    <td>{estudiante.rut}</td>
+                                    <td>{estudiante.nombres}</td>
+                                    <td>{estudiante.apellidos}</td>
+                                    <td>{estudiante.tipo_colegio}</td>
+                                    <td>{estudiante.nombre_colegio}</td>
+                                    <td>{estudiante.fecha_nacimiento}</td>
+                                    <td>{estudiante.ano_egreso}</td>
                                 </tr>
                             ))}
                         </tbody>
