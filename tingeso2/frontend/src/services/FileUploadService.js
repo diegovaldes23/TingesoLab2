@@ -1,11 +1,16 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/marcas-reloj/";
+
 
 class FileUploadService{
     
-    CargarArchivo(file){
-        return axios.post(API_URL, file);
+
+    uploadFile(file){
+        return axios.post(`http://localhost:8080/pruebas/file-upload`, file);
+    }
+
+    getExams(){
+        return axios.get(`http://localhost:8080/pruebas/listar-pruebas`);
     }
 }
 

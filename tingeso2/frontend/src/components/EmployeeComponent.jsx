@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import NavbarComponent from "./NavbarComponent";
+import NavbarComponent4 from "./NavbarComponent4";
 import styled from "styled-components";
 
 class EmployeeComponent extends Component{
@@ -19,7 +19,7 @@ class EmployeeComponent extends Component{
     render(){
         return(
             <div className="home">
-                <NavbarComponent />
+                <NavbarComponent4 />
                 <Styles>
                 <h1 className="text-center"> <b>Listado de Estudiantes</b></h1>
                     <div className="f">
@@ -98,7 +98,7 @@ const Styles = styled.div`
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .content-table thead tr{
-    background-color: #009879;
+    background-color: #D49D7A;
     color: #ffffff;
     text-align: left;
     font-weight: bold;

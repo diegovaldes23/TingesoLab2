@@ -29,7 +29,7 @@ export default function Home() {
           </div>
 
           <div className="single-box">
-            <a href="/justificativo">
+            <a href="/crear-cuota">
               <div className="img-area" style={{ backgroundImage: "url('https://cdn-icons-png.flaticon.com/128/3681/3681447.png')" }}></div>
             </a>
             <div className="img-text">
@@ -38,7 +38,7 @@ export default function Home() {
           </div>
           
           <div className="single-box">
-            <a href="/planilla-sueldos">
+            <a href="/crear-resumenes">
               <div className="img-area" style={{ backgroundImage: "url('https://cdn-icons-png.flaticon.com/128/1321/1321938.png')" }}></div>
             </a>
             <div className="img-text">

@@ -1,25 +1,25 @@
 import React from "react";
 import styled from "styled-components";
 
-function NavbarComponent3(){
+function NavbarComponent6(){
     return(
         <>
         <NavStyle>
-            <header class="header">
-                <div class="logo">
+            <header className="header">
+                <div className="logo">
                     <h1>Top Education</h1>
                 </div>
                 <nav>
                 </nav>
-                <a class="btn" href="/"><button>Volver al menú principal</button></a>
+                <a className="btn" href="/"><button>Volver al menú principal</button></a>
+                <a className="btn-2" href="/ver-resumenes"><button>Ver Resumenes</button></a>
             </header>
-            </NavStyle>
+        </NavStyle>
         </>
     )
 }
 
-export default NavbarComponent3;
-
+export default NavbarComponent6;
 
 const NavStyle = styled.nav`
   .header {

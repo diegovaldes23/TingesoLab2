@@ -1,13 +1,10 @@
 package com.example.resumenservice.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 
 @Data                           // Genera automáticamente getters, setters, toString, equals, y hashCode
-@NoArgsConstructor              // Constructor sin argumentos
-@AllArgsConstructor             // Constructor con todos los argumentos
 public class CuotasEntity {
 
     private String rut;             // Identificación única asociada a la cuota

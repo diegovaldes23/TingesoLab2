@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PruebasService {
@@ -25,7 +26,9 @@ public class PruebasService {
     private final Logger logg = LoggerFactory.getLogger(PruebasService.class);
 
     //Obtener todos las pruebas
-    public ArrayList<PruebasEntity> obtenerPruebas(){ return (ArrayList<PruebasEntity>) pruebasRepository.findAll();}
+    public List<PruebasEntity> obtenerPruebas(){
+        return (List<PruebasEntity>) pruebasRepository.findAll();
+    }
 
     public Double findPromedioPuntaje(String rut){return pruebasRepository.findPromedioPuntaje(rut);};
 

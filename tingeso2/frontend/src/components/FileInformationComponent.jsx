@@ -11,7 +11,7 @@ class FileInformationComponent extends Component{
     }
 
     componentDidMount(){
-        fetch("http://localhost:8080/marcas-reloj")
+        fetch("http://localhost:8080/pruebas/listar-pruebas")
         .then((response) => response.json())
         .then((data) => this.setState({ data: data }));
     }
@@ -27,18 +27,18 @@ class FileInformationComponent extends Component{
                         <table border="1" class="content-table">
                             <thead>
                                 <tr>
-                                    <th>Fecha</th>
-                                    <th>Hora</th>
                                     <th>Rut</th>
+                                    <th>Fecha del examen</th>
+                                    <th>Puntaje</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.state.data.map((data) => (
-                                    <tr key={data.id}>
-                                        <td>{data.fecha}</td>
-                                        <td>{data.hora}</td>
-                                        <td>{data.rut}</td>
-                                    </tr>
+                                {this.state.data.map((dataItem) => (
+                                <tr key={dataItem.id}>
+                                    <td>{dataItem.rut}</td>
+                                    <td>{dataItem.fecha}</td>
+                                    <td>{dataItem.puntaje}</td>
+                                </tr>
                                 ))}
                             </tbody>
                         </table>
@@ -87,7 +87,7 @@ const Styles = styled.div`
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .content-table thead tr{
-    background-color: #009879;
+    background-color: #D49D7A;
     color: #ffffff;
     text-align: left;
     font-weight: bold;

@@ -15,8 +15,8 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="cuota-service" options="" />
-      <module name="estudiante-service" options="" />
+      <module name="cuota-service" options="-parameters" />
+      <module name="estudiante-service" options="-parameters" />
       <module name="resumen-service" options="-parameters" />
     </option>
   </component>

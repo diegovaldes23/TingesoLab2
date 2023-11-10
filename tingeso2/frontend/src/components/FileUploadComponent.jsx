@@ -21,6 +21,9 @@ class FileUploadComponent extends Component{
     this.setState({ file: event.target.files[0] });
   }
   
+
+
+
   onFileUpload = () => {
     swal({
       title: "¿Está seguro de que desea cargar el archivo de texto?",
@@ -33,7 +36,7 @@ class FileUploadComponent extends Component{
         swal("Archivo cargado correctamente!", {icon: "success", timer: "3000"});
         const formData = new FormData();
         formData.append("file", this.state.file);
-        FileUploadService.CargarArchivo(formData).then((res) => {
+        FileUploadService.uploadFile(formData).then((res) => {
         });
       }
       else{

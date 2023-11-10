@@ -1,11 +1,9 @@
 package com.example.resumenservice.entities;
-
-import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 
+import javax.persistence.*;
 @Entity
 @Table(name = "resumen")    // Nombre de la tabla en la base de datos
 @Data                       // Genera automáticamente getters, setters, toString, equals, y hashCode
@@ -13,8 +11,7 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor         // Constructor con todos los argumentos
 public class ResumenEntity {
     @Id
-    @NotNull                                 // Anotación de validación personalizada
-
+    @Column(nullable = false)// Anotación de validación personalizada
     private String rut;                 // Identificación única del resumen (rut del estudiante)
     private String nombre_estudiante;   // Nombre del estudiante asociado al resumen
     private int examen_rendido;         // Número de exámenes rendidos
