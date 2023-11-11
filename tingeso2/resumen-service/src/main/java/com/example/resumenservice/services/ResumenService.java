@@ -27,7 +27,7 @@ public class ResumenService {
     PruebasService pruebasService;
 
     private final RestTemplate restTemplate;
-    private final String cuotasServiceUrl = "http://servicio-cuota/cuota"; // La URL base del servicio de cuotas
+    private final String cuotasServiceUrl = "http://cuota-service/cuota"; // La URL base del servicio de cuotas
 
 
     @Autowired
@@ -42,7 +42,7 @@ public class ResumenService {
     public List<CuotasEntity> obtenerCuotasPorRut(String rut) {
         ResponseEntity<List<CuotasEntity>> response =
                 restTemplate.exchange(
-                        "http://servicio-cuota/cuota/" + rut,
+                        "http://cuota-service/cuota/ver/" + rut,
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<List<CuotasEntity>>() {}
@@ -52,16 +52,11 @@ public class ResumenService {
     }
 
     public EstudiantesEntity obtenerEstudiantePorRut(String rut) {
-        ResponseEntity<EstudiantesEntity> response =
-                restTemplate.exchange(
-                        "http://servicio-estudiante/estudiante/buscar-estudiante/" + rut,
-                        HttpMethod.GET,
-                        null,
-                        EstudiantesEntity.class
-                );
-
-        return response.getBody(); // Aquí manejas la posibilidad de null si es necesario
+        EstudiantesEntity estudiante = restTemplate.getForObject("http://estudiante-service/estudiante/buscar-estudiante/" + rut,
+                EstudiantesEntity.class);
+        return estudiante;
     }
+
     // Método modificado para calcular el resumen
     public void calculoResumen(String rut) throws ParseException {
         // Obtener datos del estudiante y cuotas
@@ -147,16 +142,32 @@ public class ResumenService {
     }
 
     private int obtenerCantidadCuotasPagadas(String rut) {
-        return restTemplate.getForObject(cuotasServiceUrl + "/cantidad-pagas/" + rut, Integer.class);
+        Integer cantidadPagadas = restTemplate.getForObject(cuotasServiceUrl + "/cantidad-pagas/" + rut, Integer.class);
+        if (cantidadPagadas == null) {
+            // Manejar el caso de null, por ejemplo, devolver 0
+            return 0;
+        }
+        return cantidadPagadas;
     }
 
     private double obtenerMontoTotalPagado(String rut) {
-        return restTemplate.getForObject(cuotasServiceUrl + "/monto-total-pagado/" + rut, Double.class);
+        Double montoTotalPagado = restTemplate.getForObject(cuotasServiceUrl + "/monto-total-pagado/" + rut, Double.class);
+        if (montoTotalPagado == null) {
+            // Manejar el caso de null, por ejemplo, devolver 0.0
+            return 0.0;
+        }
+        return montoTotalPagado;
     }
 
     private double obtenerMontoTotalPendiente(String rut) {
-        return restTemplate.getForObject(cuotasServiceUrl + "/monto-total-pendiente/" + rut, Double.class);
+        Double montoTotalPendiente = restTemplate.getForObject(cuotasServiceUrl + "/monto-total-pendiente/" + rut, Double.class);
+        if (montoTotalPendiente == null) {
+            // Manejar el caso de null, por ejemplo, devolver 0.0
+            return 0.0;
+        }
+        return montoTotalPendiente;
     }
+
 
 
 

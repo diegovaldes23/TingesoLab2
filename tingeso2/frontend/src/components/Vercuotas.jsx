@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import CuotasService from './CuotasService'; // Asegúrate de que el servicio esté correctamente definido y exportado
 import NavbarComponent4 from "./NavbarComponent4"; // Asegúrate de tener este componente
 import styled from "styled-components";
 
@@ -12,8 +13,30 @@ class CuotasComponent extends Component {
 
     componentDidMount() {
         fetch("http://localhost:8080/cuota") // Ajusta la URL según tu backend
-        .then(response => response.json())
-        .then(data => this.setState({ cuotas: data }));
+            .then(response => {
+                if(response.ok) {
+                    return response.json();
+                }
+                throw new Error('La respuesta de la red no fue ok.');
+            })
+            .then(data => this.setState({ cuotas: data }))
+            .catch(error => console.error('Hubo un problema con la petición fetch:', error));
+    }
+
+    realizarPago = (id) => {
+        CuotasService.procesarPago(id)
+            .then(response => {
+                if (response.status === 200) {
+                    alert("Pago procesado con éxito.");
+                    // Aquí podrías recargar la lista de cuotas para reflejar el cambio de estado
+                    this.componentDidMount();
+                } else {
+                    alert("Hubo un problema al procesar el pago.");
+                }
+            })
+            .catch(error => {
+                alert("Error en la solicitud: " + error.message);
+            });
     }
 
     render() {
@@ -51,10 +74,11 @@ class CuotasComponent extends Component {
                                         <td>{cuota.fecha_vencimiento}</td>
                                         <td>{cuota.fecha_pago}</td>
                                         <td>
-                                            <form action="/procesar-pago" method="post">
-                                                <input type="hidden" name="id" value={cuota.id} />
-                                                <button type="submit" className="btn btn-success btn-sm">Pagar</button>
-                                            </form>
+                                            <button 
+                                                onClick={() => this.realizarPago(cuota.id)}
+                                                className="btn btn-success btn-sm">
+                                                    Pagar
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}

@@ -27,7 +27,7 @@ public class CuotasController {
     public ResponseEntity<List<CuotasEntity>> listarCuotas(@RequestParam(value = "rut", required = false) String rut) {
         List<CuotasEntity> cuotas;
         if (rut != null && !rut.isEmpty()) {
-            cuotas = cuotasService.findRut(rut);
+            cuotas = cuotasService.findByRut(rut);
         } else {
             cuotas = cuotasService.findAll();
         }
@@ -56,46 +56,48 @@ public class CuotasController {
             cuotasService.pagando(id);
             return ResponseEntity.ok("Pago procesado con éxito.");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al procesar el pago: " + e.getMessage());
+            // Es importante devolver un estado HTTP adecuado para las respuestas de error.
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar el pago: " + e.getMessage());
         }
     }
 
     // Obtener la cantidad de cuotas pagadas por RUT
     @GetMapping("/cantidad-pagas/{rut}")
     public ResponseEntity<Integer> obtenerCantidadPagas(@PathVariable String rut) {
-        try {
-            int cantidadPagas = cuotasService.findcantidadpagas(rut);
-            return ResponseEntity.ok(cantidadPagas);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+        Integer cantidadPagas = cuotasService.findcantidadpagas(rut);
+        // Se maneja el caso donde cantidadPagas puede ser null
+        if (cantidadPagas == null) {
+            cantidadPagas = 0; // O manejar de otra manera como lanzar una excepción
         }
+        return ResponseEntity.ok(cantidadPagas);
     }
 
     // Obtener el monto total pagado por RUT
     @GetMapping("/monto-total-pagado/{rut}")
     public ResponseEntity<Double> obtenerMontoTotalPagado(@PathVariable String rut) {
-        try {
-            Double montoTotalPagado = cuotasService.findMontoTotalPagado(rut);
-            return ResponseEntity.ok(montoTotalPagado);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+        Double montoTotalPagado = cuotasService.findMontoTotalPagado(rut);
+        // Se maneja el caso donde montoTotalPagado puede ser null
+        if (montoTotalPagado == null) {
+            montoTotalPagado = 0.0; // O manejar de otra manera como lanzar una excepción
         }
+        return ResponseEntity.ok(montoTotalPagado);
     }
 
     // Obtener el monto total pendiente por RUT
     @GetMapping("/monto-total-pendiente/{rut}")
     public ResponseEntity<Double> obtenerMontoTotalPendiente(@PathVariable String rut) {
-        try {
-            Double montoTotalPendiente = cuotasService.findMontoTotalPendiente(rut);
-            return ResponseEntity.ok(montoTotalPendiente);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+        Double montoTotalPendiente = cuotasService.findMontoTotalPendiente(rut);
+        // Se maneja el caso donde montoTotalPendiente puede ser null
+        if (montoTotalPendiente == null) {
+            montoTotalPendiente = 0.0; // O manejar de otra manera como lanzar una excepción
         }
+        return ResponseEntity.ok(montoTotalPendiente);
     }
-    @GetMapping("/{rut}")
+
+    @GetMapping("/ver/{rut}")
     public ResponseEntity<List<CuotasEntity>> obtenerCuotasPorRut(@PathVariable String rut) {
         try {
-            List<CuotasEntity> cuotas = cuotasService.findRut(rut);
+            List<CuotasEntity> cuotas = cuotasService.findByRut(rut);
             if(cuotas == null || cuotas.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }

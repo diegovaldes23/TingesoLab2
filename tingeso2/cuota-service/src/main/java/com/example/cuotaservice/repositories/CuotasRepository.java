@@ -15,7 +15,7 @@ public interface CuotasRepository extends CrudRepository<CuotasEntity, Long> {
 
     // Consulta personalizada para encontrar cuotas por rut
     @Query("select e from CuotasEntity e where e.rut = :rut")
-    List<CuotasEntity> findRut(@Param("rut") String rut);
+    ArrayList<CuotasEntity> findByRut(@Param("rut") String rut);
 
     // Consulta personalizada para encontrar cuota por id
     @Query("select e from CuotasEntity e where e.id = :id")

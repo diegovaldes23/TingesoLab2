@@ -21,8 +21,8 @@ public class CuotasService {
 
     //Obtener cuotas
 
-    public List<CuotasEntity> findRut(String rut){
-        return (List<CuotasEntity>)cuotasRepository.findRut(rut);
+    public List<CuotasEntity> findByRut(String rut){
+        return cuotasRepository.findByRut(rut);
     }
     public ArrayList<CuotasEntity>findAll(){
         return (ArrayList<CuotasEntity>)cuotasRepository.findAll();
