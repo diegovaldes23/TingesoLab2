@@ -35,4 +35,4 @@ spring:
         - id: resumen-service
           uri: lb://resumen-service
           predicates:
-            - Path=/pruebas/**
+            - Path=/resumen/**
