@@ -18,7 +18,7 @@ spec:
         - name: topeducation-cuota-mysql
           image: diez2332/topeducation-cuota-mysql:latest
           ports:
-            - containerPort: 8081
+            - containerPort: 8082
           env:
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://config-service:8081

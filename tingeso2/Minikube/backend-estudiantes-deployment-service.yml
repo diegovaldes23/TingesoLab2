@@ -15,10 +15,10 @@ spec:
         app: backend-estudiantes-deployment
     spec:
       containers:
-        - name: topeducation-estudiantes-mysql
+        - name: topeducation-estudiante-mysql
           image: diez2332/topeducation-estudiante-mysql:latest
           ports:
-            - containerPort: 8081
+            - containerPort: 8083
           env:
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://config-service:8081

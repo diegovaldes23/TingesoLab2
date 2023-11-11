@@ -15,10 +15,10 @@ spec:
         app: backend-resumen-deployment
     spec:
       containers:
-        - name: resumen-mysql
+        - name: topeducation-resumen-mysql
           image: diez2332/topeducation-resumen-mysql:latest
           ports:
-            - containerPort: 8081
+            - containerPort: 8084
           env:
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://config-service:8081
