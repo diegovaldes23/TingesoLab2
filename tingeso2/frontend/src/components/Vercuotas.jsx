@@ -1,94 +1,106 @@
 import React, { Component } from "react";
-import CuotasService from './CuotasService'; // Asegúrate de que el servicio esté correctamente definido y exportado
-import NavbarComponent4 from "./NavbarComponent4"; // Asegúrate de tener este componente
+import NavbarComponent3 from "./NavbarComponent3";
 import styled from "styled-components";
 
+
+
 class CuotasComponent extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            cuotas: [],
-        };
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      cuotas: [],
+    };
+  }
 
-    componentDidMount() {
-        fetch("http://localhost:8080/cuota") // Ajusta la URL según tu backend
-            .then(response => {
-                if(response.ok) {
-                    return response.json();
-                }
-                throw new Error('La respuesta de la red no fue ok.');
-            })
-            .then(data => this.setState({ cuotas: data }))
-            .catch(error => console.error('Hubo un problema con la petición fetch:', error));
-    }
+  componentDidMount() {
+    fetch("http://localhost:8080/cuota")
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("La respuesta de la red no fue ok.");
+      })
+      .then((data) => this.setState({ cuotas: data }))
+      .catch((error) =>
+        console.error("Hubo un problema con la petición fetch:", error)
+      );
+  }
 
-    realizarPago = (id) => {
-        CuotasService.procesarPago(id)
-            .then(response => {
-                if (response.status === 200) {
-                    alert("Pago procesado con éxito.");
-                    // Aquí podrías recargar la lista de cuotas para reflejar el cambio de estado
-                    this.componentDidMount();
-                } else {
-                    alert("Hubo un problema al procesar el pago.");
-                }
-            })
-            .catch(error => {
-                alert("Error en la solicitud: " + error.message);
-            });
-    }
+  realizarPago = (id) => {
+    const url = `http://localhost:8080/cuota/pago/${id}`;
 
-    render() {
-        return (
-            <div className="home">
-                <NavbarComponent4 />
-                <Styles>
-                    <h1 className="text-center">Listado de Cuotas</h1>
-                    <div className="f">
-                        <table className="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Rut</th>
-                                    <th>Cantidad de Cuotas</th>
-                                    <th>Capital</th>
-                                    <th>Descuento Prueba</th>
-                                    <th>Multa</th>
-                                    <th>Monto Total</th>
-                                    <th>Estado</th>
-                                    <th>Fecha Vencimiento</th>
-                                    <th>Fecha de Pago</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.state.cuotas.map((cuota) => (
-                                    <tr key={cuota.id}>
-                                        <td>{cuota.rut}</td>
-                                        <td>{cuota.cantidad_cuotas}</td>
-                                        <td>{cuota.capital}</td>
-                                        <td>{cuota.descuento_prueba}</td>
-                                        <td>{cuota.multa}</td>
-                                        <td>{cuota.monto_total}</td>
-                                        <td>{cuota.estado}</td>
-                                        <td>{cuota.fecha_vencimiento}</td>
-                                        <td>{cuota.fecha_pago}</td>
-                                        <td>
-                                            <button 
-                                                onClick={() => this.realizarPago(cuota.id)}
-                                                className="btn btn-success btn-sm">
-                                                    Pagar
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </Styles>
-            </div>
-        );
-    }
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.text();  // Cambia esto a .text() si la respuesta es texto plano
+        }
+        throw new Error('Algo salió mal en la solicitud de pago');
+    })
+    .then(mensaje => {
+        alert(mensaje);  // Ahora 'mensaje' es un String y no un objeto JSON
+        this.componentDidMount();  // Vuelve a cargar los datos
+    })
+    .catch(error => {
+        alert("Error en la solicitud: " + error.message);
+    });
+};
+
+  render() {
+    return (
+      <div className="home">
+        <NavbarComponent3 />
+        <Styles>
+          <h1 className="text-center">Listado de Cuotas</h1>
+          <div className="f">
+            <table className="content-table">
+              <thead>
+                <tr>
+                  <th>Rut</th>
+                  <th>Cantidad de Cuotas</th>
+                  <th>Capital</th>
+                  <th>Descuento Prueba</th>
+                  <th>Multa</th>
+                  <th>Monto Total</th>
+                  <th>Estado</th>
+                  <th>Fecha Vencimiento</th>
+                  <th>Fecha de Pago</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.cuotas.map((cuota) => (
+                  <tr key={cuota.id}>
+                    <td>{cuota.rut}</td>
+                    <td>{cuota.cantidad_cuotas}</td>
+                    <td>{cuota.capital}</td>
+                    <td>{cuota.descuento_prueba}</td>
+                    <td>{cuota.multa}</td>
+                    <td>{cuota.monto_total}</td>
+                    <td>{cuota.estado}</td>
+                    <td>{cuota.fecha_vencimiento}</td>
+                    <td>{cuota.fecha_pago}</td>
+                    <td>
+                      <button
+                        onClick={() => this.realizarPago(cuota.id)}
+                        className="btn btn-success btn-sm"
+                      >
+                        Pagar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Styles>
+      </div>
+    );
+  }
 }
 
 export default CuotasComponent;
