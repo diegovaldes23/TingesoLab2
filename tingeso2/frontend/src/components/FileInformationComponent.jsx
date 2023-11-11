@@ -11,7 +11,7 @@ class FileInformationComponent extends Component{
     }
 
     componentDidMount(){
-        fetch("http://localhost:8080/pruebas/listar-pruebas")
+        fetch("http://localhost:8080/resumen/listar-pruebas")
         .then((response) => response.json())
         .then((data) => this.setState({ data: data }));
     }
@@ -35,8 +35,8 @@ class FileInformationComponent extends Component{
                             <tbody>
                                 {this.state.data.map((dataItem) => (
                                 <tr key={dataItem.id}>
-                                    <td>{dataItem.rut}</td>
-                                    <td>{dataItem.fecha}</td>
+                                    <td>{dataItem.rut_estudiante}</td>
+                                    <td>{dataItem.fecha_examen}</td>
                                     <td>{dataItem.puntaje}</td>
                                 </tr>
                                 ))}

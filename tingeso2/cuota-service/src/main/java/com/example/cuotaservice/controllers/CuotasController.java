@@ -1,6 +1,7 @@
 package com.example.cuotaservice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.cuotaservice.entities.CuotasEntity;
@@ -9,9 +10,10 @@ import com.example.cuotaservice.services.Pago;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
-@RequestMapping("/cuotas")
+@RequestMapping("/cuota")
 public class CuotasController {
 
     @Autowired
@@ -22,8 +24,8 @@ public class CuotasController {
 
     // Listar todas las cuotas o filtrar por RUT
     @GetMapping
-    public ResponseEntity<ArrayList<CuotasEntity>> listarCuotas(@RequestParam(value = "rut", required = false) String rut) {
-        ArrayList<CuotasEntity> cuotas;
+    public ResponseEntity<List<CuotasEntity>> listarCuotas(@RequestParam(value = "rut", required = false) String rut) {
+        List<CuotasEntity> cuotas;
         if (rut != null && !rut.isEmpty()) {
             cuotas = cuotasService.findRut(rut);
         } else {
@@ -90,4 +92,18 @@ public class CuotasController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+    @GetMapping("/{rut}")
+    public ResponseEntity<List<CuotasEntity>> obtenerCuotasPorRut(@PathVariable String rut) {
+        try {
+            List<CuotasEntity> cuotas = cuotasService.findRut(rut);
+            if(cuotas == null || cuotas.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(cuotas, HttpStatus.OK);
+        } catch (Exception e) {
+            // Loggear el error y manejar adecuadamente la excepción
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

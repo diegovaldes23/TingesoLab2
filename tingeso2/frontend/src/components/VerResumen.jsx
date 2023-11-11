@@ -11,7 +11,7 @@ class ResumenComponent extends Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:8080/resumenes/listar-resumenes") // Asume que esta es la URL correcta para tu API
+        fetch("http://localhost:8080/resumen/listar-resumenes") // Asume que esta es la URL correcta para tu API
           .then((response) => response.json())
           .then((data) => this.setState({ resumenes: data }));
     }

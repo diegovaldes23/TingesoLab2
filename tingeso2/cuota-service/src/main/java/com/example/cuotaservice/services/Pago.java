@@ -14,6 +14,7 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.cuotaservice.model.EstudiantesEntity;
@@ -47,13 +48,13 @@ public class Pago {
     }
 
 
-    public ArrayList<PruebasEntity> obtenerPruebasPorRut(String rut) {
-        ResponseEntity<ArrayList<PruebasEntity>> response =
+    public List<PruebasEntity> obtenerPruebasPorRut(String rut) {
+        ResponseEntity<List<PruebasEntity>> response =
                 restTemplate.exchange(
-                        "http://resumen-service/pruebas/" + rut,
+                        "http://resumen-service/resumen/pruebas/" + rut,
                         HttpMethod.GET,
                         null,
-                        new ParameterizedTypeReference<ArrayList<PruebasEntity>>() {}
+                        new ParameterizedTypeReference<List<PruebasEntity>>() {}
                 );
 
         return response.getBody(); // Aquí manejas la posibilidad de null si es necesario
@@ -63,7 +64,7 @@ public class Pago {
     public void calculoCuotas(String rut, int cantidad_cuotas) throws ParseException {
 
         EstudiantesEntity estudianteActual = obtenerEstudiantePorRut(rut);
-        //ArrayList<PruebasEntity> pruebaActual = obtenerPruebasPorRut(rut);
+        List<PruebasEntity> pruebaActual = obtenerPruebasPorRut(rut);
 
         // Inicializar el descuento acumulado
         double descuentoAcumulado = 0.0;
@@ -74,17 +75,17 @@ public class Pago {
 
                 // Calcular el descuento acumulado para esta cuota
                 double nuevo_arancel = division(cantidad_cuotas, calcularDescuentoAcumulable(calcularDescuentoColegio(estudianteActual, cantidad_cuotas), calcularDescuentoAno(estudianteActual, cantidad_cuotas)));
-                //double descuentoPep = calcularDescuentoPuntajes(pruebaActual, calcularFecha(i), cantidad_cuotas, nuevo_arancel);
+                double descuentoPep = calcularDescuentoPuntajes(pruebaActual, calcularFecha(i), cantidad_cuotas, nuevo_arancel);
 
                 // Acumular el descuento
-                //descuentoAcumulado += descuentoPep;
+                descuentoAcumulado += descuentoPep;
 
                 estudiante_reporteCuotas.setRut(estudianteActual.getRut());
                 estudiante_reporteCuotas.setCantidad_cuotas(cantidad_cuotas);
                 estudiante_reporteCuotas.setCapital(nuevo_arancel);
-                //estudiante_reporteCuotas.setDescuento_prueba(descuentoAcumulado); // Usar el descuento acumulado
+                estudiante_reporteCuotas.setDescuento_prueba(descuentoAcumulado); // Usar el descuento acumulado
                 estudiante_reporteCuotas.setMulta(0.0);
-                //estudiante_reporteCuotas.setMonto_total(nuevo_arancel - descuentoAcumulado); // Restar el descuento acumulado
+                estudiante_reporteCuotas.setMonto_total(nuevo_arancel - descuentoAcumulado); // Restar el descuento acumulado
                 estudiante_reporteCuotas.setEstado("Pendiente");
                 estudiante_reporteCuotas.setFecha_vencimiento(calcularFecha(i));
 
@@ -94,14 +95,14 @@ public class Pago {
             CuotasEntity estudiante_reporteCuotas = new CuotasEntity();
 
             double nuevo_arancel = calcularDescuentoAcumulable( calcularDescuentoColegio(estudianteActual, cantidad_cuotas), calcularDescuentoAno(estudianteActual, cantidad_cuotas));
-            //double descuentoPep = calcularDescuentoPuntajes(pruebaActual, calcularFecha(1), cantidad_cuotas, nuevo_arancel);
+            double descuentoPep = calcularDescuentoPuntajes(pruebaActual, calcularFecha(1), cantidad_cuotas, nuevo_arancel);
 
             estudiante_reporteCuotas.setRut(estudianteActual.getRut());
             estudiante_reporteCuotas.setCantidad_cuotas(cantidad_cuotas);
             estudiante_reporteCuotas.setCapital(nuevo_arancel);
-            //estudiante_reporteCuotas.setDescuento_prueba(descuentoPep); // Usar el descuento acumulado
+            estudiante_reporteCuotas.setDescuento_prueba(descuentoPep); // Usar el descuento acumulado
             estudiante_reporteCuotas.setMulta(0.0);
-            //estudiante_reporteCuotas.setMonto_total(nuevo_arancel - descuentoPep); // Restar el descuento acumulado
+            estudiante_reporteCuotas.setMonto_total(nuevo_arancel - descuentoPep); // Restar el descuento acumulado
             estudiante_reporteCuotas.setEstado("Contado");
 
             cuotasRepository.save(estudiante_reporteCuotas);
@@ -220,7 +221,7 @@ public class Pago {
 
     }
 
-    public static double calcularDescuentoPuntajes(ArrayList<PruebasEntity> pruebas, String vencimiento, int cantidad_cuotas, double capital) {
+    public static double calcularDescuentoPuntajes(List<PruebasEntity> pruebas, String vencimiento, int cantidad_cuotas, double capital) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         try {

@@ -27,7 +27,7 @@ public class ResumenService {
     PruebasService pruebasService;
 
     private final RestTemplate restTemplate;
-    private final String cuotasServiceUrl = "http://servicio-cuota/cuotas"; // La URL base del servicio de cuotas
+    private final String cuotasServiceUrl = "http://servicio-cuota/cuota"; // La URL base del servicio de cuotas
 
 
     @Autowired
@@ -39,13 +39,13 @@ public class ResumenService {
         return (ArrayList<ResumenEntity>) resumenRepository.findAll();
     }
 
-    public ArrayList<CuotasEntity> obtenerCuotasPorRut(String rut) {
-        ResponseEntity<ArrayList<CuotasEntity>> response =
+    public List<CuotasEntity> obtenerCuotasPorRut(String rut) {
+        ResponseEntity<List<CuotasEntity>> response =
                 restTemplate.exchange(
-                        "http://servicio-cuota/cuotas/" + rut,
+                        "http://servicio-cuota/cuota/" + rut,
                         HttpMethod.GET,
                         null,
-                        new ParameterizedTypeReference<ArrayList<CuotasEntity>>() {}
+                        new ParameterizedTypeReference<List<CuotasEntity>>() {}
                 );
 
         return response.getBody(); // Aquí manejas la posibilidad de null si es necesario
@@ -66,8 +66,8 @@ public class ResumenService {
     public void calculoResumen(String rut) throws ParseException {
         // Obtener datos del estudiante y cuotas
         EstudiantesEntity estudianteActual = obtenerEstudiantePorRut(rut);
-        ArrayList<CuotasEntity> cuotasEstudiante = obtenerCuotasPorRut(rut);
-        ArrayList<PruebasEntity> pruebasEstudiante = pruebasService.findByRut(rut);
+        List<CuotasEntity> cuotasEstudiante = obtenerCuotasPorRut(rut);
+        List<PruebasEntity> pruebasEstudiante = pruebasService.findByRut(rut);
 
         // Calcular cantidad total de cuotas y pruebas
         int cantidadCuotas = cuotasEstudiante.size();
@@ -113,7 +113,7 @@ public class ResumenService {
 
 
 
-    public String calcularUltimoPago(ArrayList<CuotasEntity> cuotas) {
+    public String calcularUltimoPago(List<CuotasEntity> cuotas) {
         String ultimoPago = null;
         Date fechaUltimoPago = null;
 

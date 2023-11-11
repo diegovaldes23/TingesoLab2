@@ -102,7 +102,8 @@ public class PruebasService {
     }
 
 
-    public ArrayList<PruebasEntity> findByRut(String rut) {  return  (ArrayList<PruebasEntity>) pruebasRepository.findByRut(rut);
+    public List<PruebasEntity> findByRut(String rut) {
+        return pruebasRepository.findByRut(rut);
     }
 
 

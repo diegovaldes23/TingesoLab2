@@ -11,7 +11,7 @@ class CuotasComponent extends Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:8080/cuotas") // Ajusta la URL según tu backend
+        fetch("http://localhost:8080/cuota") // Ajusta la URL según tu backend
         .then(response => response.json())
         .then(data => this.setState({ cuotas: data }));
     }

@@ -3,11 +3,16 @@ package com.example.cuotaservice.services;
 import com.example.cuotaservice.entities.CuotasEntity;
 import com.example.cuotaservice.repositories.CuotasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CuotasService {
@@ -16,8 +21,8 @@ public class CuotasService {
 
     //Obtener cuotas
 
-    public ArrayList<CuotasEntity> findRut(String rut){
-        return (ArrayList<CuotasEntity>)cuotasRepository.findRut(rut);
+    public List<CuotasEntity> findRut(String rut){
+        return (List<CuotasEntity>)cuotasRepository.findRut(rut);
     }
     public ArrayList<CuotasEntity>findAll(){
         return (ArrayList<CuotasEntity>)cuotasRepository.findAll();
@@ -48,6 +53,8 @@ public class CuotasService {
             cuotasRepository.save(cuota);
         }
     }
+
+
 
 
 }

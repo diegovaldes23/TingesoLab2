@@ -1,9 +1,12 @@
 // CuotasService.js
 import axios from 'axios';
+const API_URL = "http://localhost:8080/cuota";
+
+
 
 class CuotasService {
   generarCuotas(rut, cantidadCuotas) {
-    return axios.post(`http://tu-dominio.com/cuotas/generar/${rut}/${cantidadCuotas}`);
+    return axios.post(API_URL+"/generar/"+rut+"/"+cantidadCuotas);
   }
 }
 
