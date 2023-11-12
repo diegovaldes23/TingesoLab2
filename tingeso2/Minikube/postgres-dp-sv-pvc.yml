@@ -79,7 +79,6 @@ spec:
                 configMapKeyRef:
                   name: postgres-config-map
                   key: POSTGRES_DB_RESUMEN
-        	
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: db-data
