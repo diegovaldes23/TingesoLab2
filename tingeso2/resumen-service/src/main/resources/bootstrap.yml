@@ -1,25 +1,33 @@
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://eureka-service:8761/eureka/
 spring:
   devtools:
     restart:
       aditional-paths: src/main/java
   application:
     name: resumen-service
+  jpa:
+    database: MYSQL
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create
   cloud:
     config:
       enabled: true
       uri: http://localhost:8081
   datasource:
+    plataform: mysql
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/resumen?autorReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
-    username: root
-    password: root
-  jpa:
-    show-sql: true
-    hibernate:
-      dialect: MySQL8Dialect
-      ddl-auto: create
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+    url: jdbc:mysql://${MYSQL_DB_HOST}/${MYSQL_DB_RESUMEN}?useSSL=false
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+    hikari:
+      minimumIdle: 20
+      maximumPoolSize: 30
+      connectionTimeout: 50000
+      initialization-fail-timeout: 0
