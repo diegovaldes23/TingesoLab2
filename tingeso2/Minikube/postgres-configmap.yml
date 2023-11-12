@@ -5,7 +5,7 @@ metadata:
   labels:
     app: postgres-config-map
 data:
-  POSTGRES_DB_HOST: nuevo
+  POSTGRES_DB_HOST: postgres
   #base de dato Cuotas
   POSTGRES_DB_CUOTAS: cuota
   #base de dato Estudiantes
